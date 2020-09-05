@@ -1,0 +1,29 @@
+﻿<mah:MetroWindow x:Class="ARM_Lib.views.ReportPerBooks"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ARM_Lib.views"
+        mc:Ignorable="d"
+         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                  xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="Отчёт по книгам" Height="450" Width="989.238">
+    <Grid>
+        <DataGrid Margin="10" ItemsSource="{Binding Reports}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedReport}" Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" Width="1*"/>
+                <DataGridTextColumn Header="Автор" Binding="{Binding Path=AuthorName}" Width="2*" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Path=Name}" Width="2*"/>
+                <DataGridTextColumn Header="Жанр" Binding="{Binding Path=Genre}" Width="1.5*"/>
+                <DataGridTextColumn Header="Год издания" Binding="{Binding Path=DatePublish}" Width="2.5*"/>
+                <DataGridTextColumn Header="Издательство" Binding="{Binding Path=PublishingHouse}" Width="2*"/>
+                <DataGridTextColumn Header="Кол-во страниц" Binding="{Binding Path=AmountPages}" Width="2.7*"/>
+                <DataGridTextColumn Header="ISBN" Binding="{Binding Path=ISBN}" Width="1*"/>
+                <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="1*"/>
+                <DataGridTextColumn Header="В наличии" Binding="{Binding Path=AmountCopies}" Width="2*"/>
+                <DataGridTextColumn Header="На руках" Binding="{Binding Path=AmountBooksPerHand}" Width="2*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</mah:MetroWindow >
