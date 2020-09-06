@@ -4,6 +4,7 @@ using System;
 
 namespace ARM_Lib.converters
 {
+    // конвертер из типа BookOut в тип BookOutView
     class BookOutDbToView : ITypeConverters<BookOut, BookOutView>
     {
         public BookOutView convert(BookOut data)

@@ -217,6 +217,7 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -237,11 +238,14 @@
     </ApplicationDefinition>
     <Compile Include="converters\BookOutDbToView.cs" />
     <Compile Include="converters\BookOutToReports.cs" />
+    <Compile Include="converters\BookOutViewToDb.cs" />
     <Compile Include="converters\BooksDBToBooksView.cs" />
+    <Compile Include="converters\BookViewToDb.cs" />
     <Compile Include="converters\ITypeConverters.cs" />
     <Compile Include="converters\ReaderDbToReaderView.cs" />
     <Compile Include="converters\ReadersDbToSimplereaders.cs" />
     <Compile Include="converters\ReaderToReports.cs" />
+    <Compile Include="converters\ReaderViewToDb.cs" />
     <Compile Include="database\BooksDao.cs" />
     <Compile Include="database\BooksOutDao.cs" />
     <Compile Include="database\Context.cs" />
@@ -269,6 +273,9 @@
     <Compile Include="models_view\ReportPerBooks.cs" />
     <Compile Include="models_view\ReportPerReader.cs" />
     <Compile Include="models_view\SimpleReaderView.cs" />
+    <Compile Include="views\AuthPage.xaml.cs">
+      <DependentUpon>AuthPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="views\Books.xaml.cs">
       <DependentUpon>Books.xaml</DependentUpon>
     </Compile>
@@ -300,6 +307,8 @@
       <DependentUpon>ReturnBook.xaml</DependentUpon>
     </Compile>
     <Compile Include="vm\BooksViewModel.cs" />
+    <Compile Include="vm\IBookChanger.cs" />
+    <Compile Include="vm\IViewModelARM.cs" />
     <Compile Include="vm\NeedReturnBooksViewModel.cs" />
     <Compile Include="vm\ReadersViewModel.cs" />
     <Compile Include="vm\ReportPerBooksViewModel.cs" />

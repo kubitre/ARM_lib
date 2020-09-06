@@ -7,18 +7,27 @@
         mc:Ignorable="d"
          xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                   xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="Книги" Height="450" Width="989.238">
+        Title="Книги" Height="550" Width="989.238"
+                  WindowStartupLocation="CenterScreen"
+                 >
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl x:Name="FlyoutControls">
-            <mah:Flyout x:Name="AboutApp" Header="О приложении" Position="Bottom" Width="auto" Height="auto" IsModal="False" Theme="Accent" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
+            <mah:Flyout x:Name="AboutApp" Header="Справка " Position="Bottom" Width="auto" Height="520" IsModal="False" Theme="Accent" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
+       
                     </Grid.RowDefinitions>
-                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Приложение ARM библиотекаря" Grid.Row="0"/>
-                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Разработчик Хаиров Ришат. АВТ-712" Grid.Row="1" Margin="0 50 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Операции:" Grid.Row="1"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="1. Добавление: Нажмите на пустую строку идущую за последней " Grid.Row="1" Margin="0 25 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="отображаемой и заполните информацию. Далее Нажмите на кнопку Save" Grid.Row="1" Margin="0 50 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="2. Обновление информации:" Grid.Row="1" Margin="0 75 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Отредактируйте нужные поля и нажмите на кнопку Save" Grid.Row="1" Margin="0 100 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="3. Удаление:" Grid.Row="1" Margin="0 125 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Выделите нужную книгу и нажмите на кнопку Del на клавиатуре" Grid.Row="1" Margin="0 150 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Дополнительно: Можно осуществлять поиск по названию книги" Grid.Row="2" Margin="0 1 0 0"/>
                 </Grid>
             </mah:Flyout>
             <mah:Flyout x:Name="reports_pane" Header="Отчёты" Position="Top" Width="auto" Height="auto" IsModal="True" Theme="Adapt" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
@@ -34,13 +43,10 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Grid.Row="1">
-                        <Button Content="Отчёты по книгам"/>
+                        <Button  x:Name="report_per_books_button" Content="Отчёты по книгам" Click="report_per_books_button_Click"/>
                     </Grid>
                     <Grid Grid.Column="1" Grid.Row="1">
-                        <Button Content="Отчёты по читателям"/>
-                    </Grid>
-                    <Grid Grid.Column="2" Grid.Row="1">
-                        <Button Content="Отчёты по книге"/>
+                        <Button x:Name="report_per_reader_button" Content="Отчёты по читателям" Click="report_per_reader_button_Click"/>
                     </Grid>
                 </Grid>
             </mah:Flyout>
@@ -80,27 +86,24 @@
                     </DataTemplate>
                 </Button.ContentTemplate>
             </Button>
-        </mah:WindowCommands>
-    </mah:MetroWindow.LeftWindowCommands>
-    <mah:MetroWindow.RightWindowCommands>
-        <mah:WindowCommands>
-            <Button Click="exit_app_click">
+            <Button x:Name="back_to_main_window" Content="Назад" Click="back_to_main_window_Click">
                 <Button.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconBoxIcons Width="22"
+                            <iconPacks:PackIconEvaIcons Width="22"
                                         Height="22"
                                         VerticalAlignment="Center"
-                                        Kind="SolidExit" />
+                                        Kind="ArrowBackOutline" />
                             <TextBlock Margin="4 0 0 0"
                          VerticalAlignment="Center"
-                         />
+                         Text="{Binding}" />
                         </StackPanel>
                     </DataTemplate>
                 </Button.ContentTemplate>
             </Button>
         </mah:WindowCommands>
-    </mah:MetroWindow.RightWindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
+   
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="41*"/>
@@ -111,7 +114,14 @@
             <RowDefinition Height="140*"/>
             <RowDefinition Height="237*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="books_grid" Margin="10" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Books}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedBook}" Grid.ColumnSpan="2" AddingNewItem="books_grid_AddingNewItem" RowEditEnding="books_grid_RowEditEnding">
+        <DataGrid x:Name="books_grid" Margin="10" Grid.Row="1" Grid.RowSpan="2" 
+                  ItemsSource="{Binding Books}" 
+                  AutoGenerateColumns="False" 
+                  SelectedItem="{Binding SelectedBook}" 
+                  Grid.ColumnSpan="2" 
+                  AddingNewItem="books_grid_AddingNewItem"
+                  PreviewKeyDown="books_grid_PreviewKeyDown"
+                  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" Width="1*"/>
                 <DataGridTextColumn Header="Автор" Binding="{Binding Path=AuthorName}" Width="2*" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>

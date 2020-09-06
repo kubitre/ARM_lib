@@ -1,11 +1,14 @@
 ﻿using ARM_Lib.dg_actions;
+using ARM_Lib.models_view;
 using ARM_Lib.vm;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace ARM_Lib.views
 {
@@ -16,7 +19,8 @@ namespace ARM_Lib.views
     {
         private Dictionary<int, ActionTypes> changedCells;
         private ActionTypes currentlyActionType;
-        private int currentlyRowEditing = -1;
+        private List<BookView> tempBooks = new List<BookView>();
+
         public Books()
         {
             InitializeComponent();
@@ -39,8 +43,20 @@ namespace ARM_Lib.views
             this.Close();
         }
 
-        private void RemoveBook_Click(object sender, RoutedEventArgs e)
+        private async void RemoveBook_Click(object sender, RoutedEventArgs e)
         {
+            var grid = (System.Windows.Controls.DataGrid)sender;
+            try
+            {
+                tempBooks.Add(grid.SelectedItem as BookView);
+            }
+            catch (Exception exc)
+            {
+                await this.ShowMessageAsync("Deleting element from database", "exc: " + exc.Message);
+            }
+            currentlyActionType = ActionTypes.Remove;
+
+            this.changedCells.Add(tempBooks.Count - 1, ActionTypes.Remove);
         }
 
         private void EditBook_Click(object sender, RoutedEventArgs e)
@@ -48,13 +64,13 @@ namespace ARM_Lib.views
 
         }
 
+        // основной метоод, который отслеживает измененние ячеек в таблице.
         private async void CellEditEventHandler(object sender, DataGridCellEditEndingEventArgs e)
         {
             if (e.EditAction == DataGridEditAction.Commit)
             {
                 if (changedCells.ContainsKey(e.Row.GetIndex()))
                 {
-                    await this.ShowMessageAsync("Already changed on row was catched", "tururu");
                     return;
                 }
                 switch(currentlyActionType)
@@ -63,29 +79,77 @@ namespace ARM_Lib.views
                         currentlyActionType = ActionTypes.Update;
                         this.changedCells.Add(e.Row.GetIndex(), ActionTypes.Create);
                         break;
+                    case ActionTypes.Remove:
+                        currentlyActionType = ActionTypes.Undefined;
+                        this.changedCells.Add(e.Row.GetIndex(), ActionTypes.Remove);
+                        await this.ShowMessageAsync("Deleting element from database", "message");
+                        break;
                     default:
                         this.changedCells.Add(e.Row.GetIndex(), ActionTypes.Update);
                         break;
                 }
                 
                 this.commit_button.IsEnabled = true;
-                await this.ShowMessageAsync("First catch changed", "tururu");
             }
         }
 
+        // после того, как пользователь всё что нужно сделал (добавил, отредачил, удалил), он берёт и коммитит
         private void CommitSave_Click(object sender, RoutedEventArgs e)
         {
-
+            this.commit_button.IsEnabled = false;
+            (this.DataContext as BooksViewModel).commitChangeData(this.changedCells, tempBooks); // в свою очередь через ViewModel отправляем изменнеия в базу
         }
 
-        private async void books_grid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        private void back_to_main_window_Click(object sender, RoutedEventArgs e)
         {
-            currentlyActionType = ActionTypes.Create;
+            this.Close();
         }
 
-        private async void books_grid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        private void books_grid_AddingNewItem(object sender, AddingNewItemEventArgs e)
         {
-            await this.ShowMessageAsync("Completed edited row", e.Row.Item.ToString());
+            currentlyActionType = ActionTypes.Create; // отслеживаем таким образом текущее изменение как добавление новой строки (см привязку в xaml)
+        }
+
+        private async void DataGridView1_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            await this.ShowMessageAsync("Removin handling", "Some message");
+        }
+
+        // отслеживаем удаление элемента
+        private async void books_grid_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            this.commit_button.IsEnabled = true;
+            if (e.Key == Key.Delete)
+            {
+                var grid = (System.Windows.Controls.DataGrid)sender;
+                try
+                {
+                    tempBooks.Add(grid.SelectedItem as BookView);
+                } catch(Exception exc)
+                {
+                    await this.ShowMessageAsync("Deleting element from database", "exc: " + exc.Message);
+                }
+                //this.changedCells.Add(, ActionTypes.Remove);
+                currentlyActionType = ActionTypes.Remove;
+
+                this.changedCells.Add(tempBooks.Count - 1, ActionTypes.Remove);
+            }
+        }
+
+        private void report_per_books_button_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var reportsBooks = new ReportPerBooks();
+            reportsBooks.ShowDialog();
+            this.IsEnabled = true;
+        }
+
+        private void report_per_reader_button_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var reportsReaders = new ReportPerReader();
+            reportsReaders.ShowDialog();
+            this.IsEnabled = true;
         }
     }
 }

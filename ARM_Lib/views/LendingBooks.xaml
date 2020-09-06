@@ -7,19 +7,24 @@
         mc:Ignorable="d"
                  xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        Title="Выдача книг" Height="450" Width="800">
+        Title="Выдача книг" Height="550" Width="800"
+                  WindowStartupLocation="CenterScreen"
+                 >
 
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl x:Name="FlyoutControls">
-            <mah:Flyout x:Name="AboutApp" Header="О приложении" Position="Bottom" Width="auto" Height="auto" IsModal="False" Theme="Accent" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
+            <mah:Flyout x:Name="AboutApp" Header="Справка" Position="Bottom" Width="auto" Height="520" IsModal="False" Theme="Accent" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Приложение ARM библиотекаря" Grid.Row="0"/>
-                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Разработчик Хаиров Ришат. АВТ-712" Grid.Row="1" Margin="0 50 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Для того, чтобы выдать книгу читателю, " Grid.Row="1"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="выберите читателя в списке. Далее, выберите книги из таблицы, " Grid.Row="1" Margin="0 25 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="которые хотите выдать. В таблице отображаются только доступные" Grid.Row="1" Margin="0 5 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="конкретному читателю книги. Важно: В таблице отображаются " Grid.Row="2" Margin="0 5 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="только доступные конкретному читателю книги" Grid.Row="2" Margin="0 5 0 0"/>
                 </Grid>
             </mah:Flyout>
             <mah:Flyout x:Name="reports_pane" Header="Отчёты" Position="Top" Width="auto" Height="auto" IsModal="True" Theme="Adapt" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
@@ -35,13 +40,10 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Grid.Row="1">
-                        <Button Content="Отчёты по книгам"/>
+                        <Button  x:Name="report_per_books_button" Content="Отчёты по книгам" Click="report_per_books_button_Click"/>
                     </Grid>
                     <Grid Grid.Column="1" Grid.Row="1">
-                        <Button Content="Отчёты по читателям"/>
-                    </Grid>
-                    <Grid Grid.Column="2" Grid.Row="1">
-                        <Button Content="Отчёты по книге"/>
+                        <Button x:Name="report_per_reader_button" Content="Отчёты по читателям" Click="report_per_reader_button_Click"/>
                     </Grid>
                 </Grid>
             </mah:Flyout>
@@ -74,6 +76,21 @@
                                         Height="22"
                                         VerticalAlignment="Center"
                                         Kind="QuestionMarkCircleOutline" />
+                            <TextBlock Margin="4 0 0 0"
+                         VerticalAlignment="Center"
+                         Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Button x:Name="back_to_main_window" Content="Назад" Click="back_to_main_window_Click">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconEvaIcons Width="22"
+                                        Height="22"
+                                        VerticalAlignment="Center"
+                                        Kind="ArrowBackOutline" />
                             <TextBlock Margin="4 0 0 0"
                          VerticalAlignment="Center"
                          Text="{Binding}" />
@@ -121,7 +138,14 @@
         </Grid.RowDefinitions>
         <ComboBox HorizontalAlignment="Left" Margin="34,17,0,0" VerticalAlignment="Top" Width="333" Height="26" Grid.Column="3" Grid.ColumnSpan="3" ItemsSource="{Binding SimpleReaders}" SelectedItem="{Binding SelectedSimpleReader}" SelectionChanged="ComboBox_SelectionChanged"/>
         <Label Content="Читатель" HorizontalAlignment="Left" Margin="163,17,0,0" VerticalAlignment="Top" Height="26" Width="60" Grid.ColumnSpan="2"/>
-        <DataGrid x:Name="datagrid" Margin="10" Grid.Row="3" Grid.ColumnSpan="6" Grid.RowSpan="1" ItemsSource="{Binding Books}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedBook}">
+        <DataGrid x:Name="datagrid" Margin="10" Grid.Row="3" 
+                  Grid.ColumnSpan="6" 
+                  Grid.RowSpan="1" 
+                  ItemsSource="{Binding Books}" AutoGenerateColumns="False" 
+                  SelectedItem="{Binding SelectedBook}"
+                  IsReadOnly="True"
+                  MouseDoubleClick="datagrid_MouseDoubleClick"
+                  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" Width="1*"/>
                 <DataGridTextColumn Header="Автор" Binding="{Binding Path=AuthorName}" Width="2*" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
@@ -133,10 +157,9 @@
                 <DataGridTextColumn Header="ISBN" Binding="{Binding Path=ISBN}" Width="1*"/>
                 <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="1*"/>
                 <DataGridTextColumn Header="В наличии" Binding="{Binding Path=AmountCopies}" Width="2*"/>
-
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="out_agreee" Content="Выдать" Margin="11.745,18,5,16" Grid.Row="4" Background="Purple" Foreground="White" Grid.ColumnSpan="4" Grid.Column="1" IsEnabled="False"/>
+        <Button x:Name="out_agreee" Content="Выдать" Margin="11.745,18,5,16" Grid.Row="4" Background="Purple" Foreground="White" Grid.ColumnSpan="4" Grid.Column="1" IsEnabled="False" Click="out_agreee_Click" />
         <Label Content="Список доступных книг для выдачи" Margin="3,17,2,10" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2"/>
         <Button x:Name="search_open"  Margin="166,10,29,1" Background="Transparent" BorderThickness="0" Grid.Column="5" Grid.Row="1" RenderTransformOrigin="0.481,0.252" Click="search_input_open_click" >
             <Button.ContentTemplate>

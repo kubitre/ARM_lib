@@ -7,19 +7,24 @@
         mc:Ignorable="d"
                  xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        Title="Возврат книг" Height="450" Width="800">
+        Title="Возврат книг" Height="550" Width="800"
+                  WindowStartupLocation="CenterScreen"
+                 >
 
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl x:Name="FlyoutControls">
-            <mah:Flyout x:Name="AboutApp" Header="О приложении" Position="Bottom" Width="auto" Height="auto" IsModal="False" Theme="Accent" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
+            <mah:Flyout x:Name="AboutApp" Header="Справка " Position="Bottom" Width="auto" Height="520" IsModal="False" Theme="Accent" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Приложение ARM библиотекаря" Grid.Row="0"/>
-                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Разработчик Хаиров Ришат. АВТ-712" Grid.Row="1" Margin="0 50 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="В данной контексте вы должжны выбрать читателя, книги" Grid.Row="1"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="которого нужно вернуть. Даллее, нажать двойным кликом на" Grid.Row="1" Margin="0 25 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="любой элемент списка и выбрать дополнительно несколько книг, " Grid.Row="1" Margin="0 50 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="если надо. Затем нажать на кнопку 'Забрать'" Grid.Row="1" Margin="0 75 0 0"/>
+                    
                 </Grid>
             </mah:Flyout>
             <mah:Flyout x:Name="reports_pane" Header="Отчёты" Position="Top" Width="auto" Height="auto" IsModal="True" Theme="Adapt" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
@@ -35,13 +40,10 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Grid.Row="1">
-                        <Button Content="Отчёты по книгам"/>
+                        <Button  x:Name="report_per_books_button" Content="Отчёты по книгам" Click="report_per_books_button_Click"/>
                     </Grid>
                     <Grid Grid.Column="1" Grid.Row="1">
-                        <Button Content="Отчёты по читателям"/>
-                    </Grid>
-                    <Grid Grid.Column="2" Grid.Row="1">
-                        <Button Content="Отчёты по книге"/>
+                        <Button x:Name="report_per_reader_button" Content="Отчёты по читателям" Click="report_per_reader_button_Click"/>
                     </Grid>
                 </Grid>
             </mah:Flyout>
@@ -81,27 +83,23 @@
                     </DataTemplate>
                 </Button.ContentTemplate>
             </Button>
-        </mah:WindowCommands>
-    </mah:MetroWindow.LeftWindowCommands>
-    <mah:MetroWindow.RightWindowCommands>
-        <mah:WindowCommands>
-            <Button Click="exit_app_click">
+            <Button x:Name="back_to_main_window" Content="Назад" Click="back_to_main_window_Click">
                 <Button.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconBoxIcons Width="22"
+                            <iconPacks:PackIconEvaIcons Width="22"
                                         Height="22"
                                         VerticalAlignment="Center"
-                                        Kind="SolidExit" />
+                                        Kind="ArrowBackOutline" />
                             <TextBlock Margin="4 0 0 0"
                          VerticalAlignment="Center"
-                         />
+                         Text="{Binding}" />
                         </StackPanel>
                     </DataTemplate>
                 </Button.ContentTemplate>
             </Button>
         </mah:WindowCommands>
-    </mah:MetroWindow.RightWindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -116,14 +114,20 @@
         </Grid.RowDefinitions>
         <ComboBox HorizontalAlignment="Left" Margin="26,17,0,0" VerticalAlignment="Top" Width="328" Height="26" Grid.Column="1" ItemsSource="{Binding Readers}" SelectedItem="{Binding SelectedSimpleReader}"/>
         <Label Content="Читатель" HorizontalAlignment="Left" Margin="150,17,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
-        <DataGrid Margin="10" Grid.Row="2" Grid.ColumnSpan="2"  ItemsSource="{Binding Books}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedBookOut}">
+        <DataGrid x:Name="return_book_grid" Margin="10" Grid.Row="2" Grid.ColumnSpan="2" 
+                  ItemsSource="{Binding Books}" 
+                  AutoGenerateColumns="False" 
+                  SelectedItem="{Binding SelectedBookOut}"
+                  IsReadOnly="True"
+                  MouseDoubleClick="DataGrid_MouseDoubleClick"
+                  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Читатель" Binding="{Binding Path=Reader}" Width="2*" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                 <DataGridTextColumn Header="Книга" Binding="{Binding Path=Book}" Width="2*"/>
                 <DataGridTextColumn Header="Дата выдачи" Binding="{Binding Path=DateOut}" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Забрать" HorizontalAlignment="Left" Margin="235,18,0,0" Grid.Row="3" VerticalAlignment="Top" Width="322" Background="Yellow" Foreground="Black" Grid.ColumnSpan="2" Height="27"/>
+        <Button x:Name="return_button" Content="Забрать" HorizontalAlignment="Left" Margin="235,18,0,0" Grid.Row="3" VerticalAlignment="Top" Width="322" Background="Yellow" Foreground="Black" Grid.ColumnSpan="2" Height="27" IsEnabled="False" Click="Button_Click"/>
         <Label Content="Список выданных книг" Margin="328,8,328,10" Grid.Row="1" Grid.ColumnSpan="2"/>
     </Grid>
 </mah:MetroWindow>

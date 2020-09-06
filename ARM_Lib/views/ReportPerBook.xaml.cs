@@ -11,5 +11,15 @@ namespace ARM_Lib.views
         {
             InitializeComponent();
         }
+
+        private void back_to_main_window_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
+        private void about_app_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

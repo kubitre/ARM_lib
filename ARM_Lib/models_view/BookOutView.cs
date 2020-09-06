@@ -19,13 +19,14 @@ namespace ARM_Lib.models_view
         // дата возврата книги (в формате int64, т.к. в бд хранить буду timestamp)
         private DateTime? dateIn;
 
+        // событие, которое в дальнейшем использется контекстом WPF для ререндера или прочих действий связанных с отрисовкой ui 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int ID
         {
             get
             {
-                return ID;
+                return id;
             }
             set
             {

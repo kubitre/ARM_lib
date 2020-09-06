@@ -1,4 +1,6 @@
-﻿using MahApps.Metro.Controls;
+﻿using ARM_Lib.views;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
 
 namespace ARM_Lib
@@ -27,5 +29,52 @@ namespace ARM_Lib
             this.Close();
         }
 
+        private void readers_open_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var readersWindow = new Readers();
+            readersWindow.ShowDialog();
+            this.IsEnabled = true;
+        }
+
+        private void books_open_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var booksWindow = new Books();
+            booksWindow.ShowDialog();
+            this.IsEnabled = true;
+        }
+
+        private void leading_books_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var lendingWindow = new LendingBooks();
+            lendingWindow.ShowDialog();
+            this.IsEnabled = true;
+        }
+
+        private void return_books_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var returnBooksWindow = new ReturnBook();
+            returnBooksWindow.ShowDialog();
+            this.IsEnabled = true;
+        }
+
+        private void Report_per_reader_button(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var reportsReaders = new ReportPerReader();
+            reportsReaders.ShowDialog();
+            this.IsEnabled = true;
+        }
+
+        private void Report_per_books_button(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var reportsBooks = new ReportPerBooks();
+            reportsBooks.ShowDialog();
+            this.IsEnabled = true;
+        }
     }
 }

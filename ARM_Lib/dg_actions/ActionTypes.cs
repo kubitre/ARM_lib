@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ARM_Lib.dg_actions
+﻿namespace ARM_Lib.dg_actions
 {
+    // Типы действий пользователя с какими-то табличными данными. нужно для того, чтобы делать определённые действия в базе с какими-то конкретными данными
     enum ActionTypes
     {
-        Undefined,
-        Create,
-        Update,
-        Remove
+        Undefined, // значение по умоолчанию
+        Create, // Пользователь добавил строку
+        Update, // Пользователь отредактировал строку
+        Remove // пользователь удалил строку
     }
 }

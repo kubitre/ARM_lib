@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace ARM_Lib.database
 {
+    // DAO по агрегации статистики, которая используется в отчётах
     class StatsDao
     {
         public ReportPerBooks ReportPerBook(int idBook)

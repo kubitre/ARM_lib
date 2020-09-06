@@ -1,6 +1,8 @@
 ﻿using ARM_Lib.models;
+using ARM_Lib.models_view;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 
 namespace ARM_Lib.database
@@ -10,7 +12,12 @@ namespace ARM_Lib.database
     {
         public bool CreateData(Reader dat)
         {
-            throw new NotImplementedException();
+            using(var dbContext = new Context())
+            {
+                dbContext.readers.Add(dat);
+                dbContext.SaveChanges();
+                return true;
+            }
         }
 
         public List<Reader> Fetch(int amount, int offset)
@@ -23,12 +30,34 @@ namespace ARM_Lib.database
 
         public bool RemoveData(Reader dat)
         {
-            throw new NotImplementedException();
+            using(var dbContext = new Context())
+            {
+                dbContext.readers.Remove(dbContext.readers.Find(dat.id));
+                dbContext.SaveChanges();
+                return true;
+            }
         }
 
         public bool UpdateData(Reader dat)
         {
-            throw new NotImplementedException();
+            using(var dbContext = new Context())
+            {
+                dbContext.readers.AddOrUpdate(dat);
+                dbContext.SaveChanges();
+                return true;
+            }
+        }
+
+        public Reader ConvertSimpleToFull(SimpleReaderView readerView)
+        {
+            using(var dbContext = new Context())
+            {
+                var reader = new Reader
+                {
+                    id = readerView.ID
+                };
+                return dbContext.readers.Find(reader.id);
+            }
         }
     }
 }

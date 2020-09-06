@@ -4,6 +4,7 @@ using System;
 
 namespace ARM_Lib.converters
 {
+    // конвертер между типами
     class BookOutToReports : ITypeConverters<Book, ReportPerBooks>
     {
         public ReportPerBooks convert(Book data)
