@@ -266,7 +266,6 @@
     <Compile Include="Migrations\202009031919316_ChangeTypeAmountCopies.designer.cs">
       <DependentUpon>202009031919316_ChangeTypeAmountCopies.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="models_view\BookOutView.cs" />
     <Compile Include="models_view\BookView.cs" />
     <Compile Include="models_view\ReaderView.cs" />

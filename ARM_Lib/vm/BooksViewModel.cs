@@ -49,7 +49,7 @@ namespace ARM_Lib.vm
                 selectedReader = value;
                 OnPropertyChanged("SelectedSimpleReader");
                 changeListBooksByReader(value); // в случае, когда у нас меняется читатьель, которому надо выдать книгу, то обновляем текущий вывод в datagrid относительно него
-                cleaningBooksOutOfStocks();
+                cleaningBooksOutOfStocks(); 
             }
         }
 

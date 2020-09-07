@@ -1,6 +1,5 @@
 ﻿using ARM_Lib.views;
 using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
 
 namespace ARM_Lib
