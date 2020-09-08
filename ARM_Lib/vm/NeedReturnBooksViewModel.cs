@@ -98,62 +98,12 @@ namespace ARM_Lib.vm
                 return;
             }
             var allBooks = this.booksOutDao.Fetch(100, 0);
-            var correlatedBooks = allBooks.FindAll(it => !it.reader.id.Equals(readerView.ID));
+            var correlatedBooks = allBooks.FindAll(it => it.reader.id.Equals(readerView.ID)).Where(it => it.dateIn == null).ToList();
             var converter = new BookOutDbToView();
+            Books.Clear();
             foreach (var correltedBook in correlatedBooks)
             {
-                try
-                {
-                    allBooks.Remove(allBooks.Single(it => it.book.id == correltedBook.book.id));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error: ", ex);
-                }
-            }
-            var newResult = new List<BookOut>(allBooks);
-            foreach (var element in allBooks)
-            {
-                if (element.dateIn != null)
-                {
-                    newResult.Remove(element);
-                }
-            }
-
-            var newResultTemp = new List<BookOut>(newResult);
-
-            var tempBookView = new ObservableCollection<BookOutView>(Books);
-
-            foreach(var book in tempBookView) {
-                var needRemoving = false;
-                foreach(var booFromBd in newResult)
-                {
-                    if (booFromBd.id == book.ID)
-                    {
-                        needRemoving = true;
-                        newResultTemp.Remove(booFromBd);
-                    }
-                }
-                if (!needRemoving)
-                {
-                    Books.Remove(book);
-                }
-            }
-            foreach(var newAdd in newResultTemp)
-            {
-                Books.Add(converter.convert(newAdd));
-            }
-        }
-
-        private void removedAlreadyInBook()
-        {
-            var tempBooks = new ObservableCollection<BookOutView>(Books);
-            foreach(var element in tempBooks)
-            {
-                if (element.DateIn != null)
-                {
-                    Books.Remove(element);
-                }
+                Books.Add(converter.convert(correltedBook));
             }
         }
 
@@ -181,7 +131,7 @@ namespace ARM_Lib.vm
 
 
                 }
-                removedAlreadyInBook();
+                updateCurrentlyListbooks();
                 return true;
             } catch (Exception exc)
             {
@@ -195,12 +145,10 @@ namespace ARM_Lib.vm
             var converter = new BookOutDbToView();
 
             var allBooks = this.booksOutDao.Fetch(100, 0)
-                .ConvertAll(it => converter.convert(it)); 
-            foreach(var book in Books)
-            {
-                allBooks.Remove(allBooks.Find(it => it.ID == book.ID));
-            }
-            allBooks.Where(it => it.DateIn == null && it.DateIn != DateTime.FromBinary(0)).ToList().ForEach(
+                .ConvertAll(it => converter.convert(it));
+
+            Books.Clear();
+            allBooks.Where(it => it.DateIn == null || it.DateIn == DateTime.FromBinary(0)).ToList().ForEach(
                 it => Books.Add(it)); // костыль, лучше не придумал на скорую руку
         }
     }

@@ -75,19 +75,38 @@ namespace ARM_Lib.vm
         private void changeListBooksByReader(SimpleReaderView readerView)
         {
             var allBooks = this.booksOutDao.Fetch(100, 0) as List<BookOut>;
-            var correlatedBooks = allBooks.FindAll(it => it.reader.id.Equals(readerView.ID));
-            foreach(var correltedBook in correlatedBooks)
+            var converter = new BooksDBToBooksView();
+            addedAllAvailableBooksFromDB();
+            foreach (var correltedBook in allBooks)
             {
-                if (correltedBook.dateIn == null)
+                if (correltedBook.reader.id.Equals(readerView.ID))
                 {
-                    var converter = new BooksDBToBooksView();
-                    try
+                    if (correltedBook.dateIn == null)
                     {
-                        Books.Remove(Books.Single(it => it.ID == converter.convert(correltedBook.book).ID));
-                    } catch(Exception ex)
-                    {
-                        Console.WriteLine("Error: ", ex);
-                    }
+                        try
+                        {
+                            Books.Remove(Books.Single(it => it.ID == converter.convert(correltedBook.book).ID));
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error: ", ex);
+                        }
+                        continue;
+                    } 
+                }
+            }
+        }
+
+        private void addedAllAvailableBooksFromDB()
+        {
+            var allBooksDb = this.booksDao.Fetch(100, 0) as List<Book>;
+            var converter = new BooksDBToBooksView();
+            foreach (var book in allBooksDb)
+            {
+                var modelBookView = converter.convert(book);
+                if (!Books.Any(it => it.ID == modelBookView.ID))
+                {
+                    Books.Add(modelBookView);
                 }
             }
         }
@@ -96,7 +115,8 @@ namespace ARM_Lib.vm
         {
             try
             {
-                foreach (var book in this.Books)
+                var tempBooker = Books.ToList();
+                foreach (var book in tempBooker)
                 {
                     if (book.AmountCopies <= 0)
                     {
@@ -162,6 +182,7 @@ namespace ARM_Lib.vm
                     });
                 }
                 changeListBooksByReader(selectedReader);
+                cleaningBooksOutOfStocks();
                 return true;
             }
             return false; 

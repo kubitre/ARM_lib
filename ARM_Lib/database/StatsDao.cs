@@ -27,18 +27,23 @@ namespace ARM_Lib.database
             using(var dbContext = new Context())
             {
                 var data = dbContext.bookOuts.Include(it => it.book).ToList();
-                var resultList = new List<ReportPerBooks>();
+                var resultList = new Dictionary<int, ReportPerBooks>();
+                var books = dbContext.books;
                 var converter = new BookOutToReports();
-                foreach (var bookOut in data)
+                foreach (var book in books)
                 {
-                    var allBookOut = data.Where(it => it.book.id == bookOut.book.id && it.dateIn == null).ToList();
-                    var convertedResult = converter.convert(bookOut.book);
-                    convertedResult.AmountBooksPerHand = allBookOut.Count;
-                    resultList.Add(
-                        convertedResult
-                        );
+                    var allBookOut = data.Where(it => it.book.id == book.id && it.dateIn == null).ToList();
+                    var convertedResult = converter.convert(book);
+                    if (resultList.ContainsKey(convertedResult.ID))
+                    {
+                        resultList[convertedResult.ID].AmountBooksPerHand += allBookOut.Count;
+                    } else
+                    {
+                        convertedResult.AmountBooksPerHand = allBookOut.Count;
+                        resultList.Add(convertedResult.ID, convertedResult);
+                    }
                 }
-                return resultList;
+                return resultList.Values.ToList();
             }
         }
 
@@ -47,16 +52,24 @@ namespace ARM_Lib.database
             using(var dbContext = new Context())
             {
                 var data = dbContext.bookOuts.Include(it => it.reader).ToList();
-                var resultList = new List<ReportPerReader>();
+                var readers = dbContext.readers;
+                var resultList = new Dictionary<int, ReportPerReader>();
                 var converter = new ReaderToReports();
-                foreach(var bookOut in data)
+                foreach(var reader in readers)
                 {
-                    var allBooksPerReader = data.Where(it => it.reader.id == bookOut.reader.id && it.dateIn == null).ToList();
-                    var convertedResult = converter.convert(bookOut.reader);
-                    convertedResult.AmountBooksOnHand = allBooksPerReader.Count;
-                    resultList.Add(convertedResult);
+                    var allBooksPerReader = data.Where(it => it.reader.id == reader.id && it.dateIn == null).ToList();
+
+                    var convertedResult = converter.convert(reader);
+                    if (resultList.ContainsKey(convertedResult.ID))
+                    {
+                        resultList[convertedResult.ID].AmountBooksOnHand += allBooksPerReader.Count;
+                    } else
+                    {
+                        convertedResult.AmountBooksOnHand = allBooksPerReader.Count;
+                        resultList.Add(convertedResult.ID, convertedResult);
+                    }
                 }
-                return resultList;
+                return resultList.Values.ToList();
             }
         }
     }

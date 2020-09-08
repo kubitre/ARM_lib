@@ -20,7 +20,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Приложение ARM библиотекаря" Grid.Row="0"/>
-                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="Разработчик Хаиров Ришат. АВТ-712" Grid.Row="1" Margin="0 50 0 0"/>
+                    <TextBlock FontSize="22" FontFamily="Times New Roman" Text="На данном этапе вы можете манипулировать с кнопками" Grid.Row="1" Margin="0 50 0 0"/>
                 </Grid>
             </mah:Flyout>
             <mah:Flyout x:Name="reports_pane" Header="Отчёты" Position="Top" Width="auto" Height="auto" IsModal="True" Theme="Adapt" CloseButtonVisibility="Visible" IsOpen="False"  AreAnimationsEnabled="True">
@@ -40,6 +40,9 @@
                     </Grid>
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Button x:Name="report_per_reader_button" Content="Отчёты по читателям" Click="Report_per_reader_button"/>
+                    </Grid>
+                    <Grid Grid.Column="2" Grid.Row="1">
+                        <Button x:Name="report_history_button" Content="История" Click="report_history_button_Click"/>
                     </Grid>
                 </Grid>
             </mah:Flyout>

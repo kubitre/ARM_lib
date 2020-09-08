@@ -238,6 +238,7 @@
     </ApplicationDefinition>
     <Compile Include="converters\BookOutDbToView.cs" />
     <Compile Include="converters\BookOutToReports.cs" />
+    <Compile Include="converters\BookOutToViewReport.cs" />
     <Compile Include="converters\BookOutViewToDb.cs" />
     <Compile Include="converters\BooksDBToBooksView.cs" />
     <Compile Include="converters\BookViewToDb.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="Migrations\202009031701201_Initial.designer.cs">
       <DependentUpon>202009031701201_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009031701201_init_license.cs" />
     <Compile Include="Migrations\202009031916581_Initial1.cs" />
     <Compile Include="Migrations\202009031916581_Initial1.designer.cs">
       <DependentUpon>202009031916581_Initial1.cs</DependentUpon>
@@ -266,9 +268,11 @@
     <Compile Include="Migrations\202009031919316_ChangeTypeAmountCopies.designer.cs">
       <DependentUpon>202009031919316_ChangeTypeAmountCopies.cs</DependentUpon>
     </Compile>
+    <Compile Include="models_db\Res.cs" />
     <Compile Include="models_view\BookOutView.cs" />
     <Compile Include="models_view\BookView.cs" />
     <Compile Include="models_view\ReaderView.cs" />
+    <Compile Include="models_view\ReportOutView.cs" />
     <Compile Include="models_view\ReportPerBooks.cs" />
     <Compile Include="models_view\ReportPerReader.cs" />
     <Compile Include="models_view\SimpleReaderView.cs" />
@@ -293,6 +297,9 @@
     </Compile>
     <Compile Include="auth\AuthConsts.cs" />
     <Compile Include="auth\IAuth.cs" />
+    <Compile Include="views\ReportHistory.xaml.cs">
+      <DependentUpon>ReportHistory.xaml</DependentUpon>
+    </Compile>
     <Compile Include="views\ReportPerBook.xaml.cs">
       <DependentUpon>ReportPerBook.xaml</DependentUpon>
     </Compile>
@@ -305,6 +312,7 @@
     <Compile Include="views\ReturnBook.xaml.cs">
       <DependentUpon>ReturnBook.xaml</DependentUpon>
     </Compile>
+    <Compile Include="vm\BooksOutViewModel.cs" />
     <Compile Include="vm\BooksViewModel.cs" />
     <Compile Include="vm\IBookChanger.cs" />
     <Compile Include="vm\IViewModelARM.cs" />
@@ -330,6 +338,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="views\Readers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="views\ReportHistory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

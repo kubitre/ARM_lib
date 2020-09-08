@@ -48,6 +48,9 @@
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Button x:Name="report_per_reader_button" Content="Отчёты по читателям" Click="report_per_reader_button_Click"/>
                     </Grid>
+                    <Grid Grid.Column="2" Grid.Row="1">
+                        <Button x:Name="report_history_button" Content="История" Click="report_history_button_Click"/>
+                    </Grid>
                 </Grid>
             </mah:Flyout>
         </mah:FlyoutsControl>

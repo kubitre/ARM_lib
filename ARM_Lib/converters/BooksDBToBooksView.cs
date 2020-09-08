@@ -15,7 +15,7 @@ namespace ARM_Lib.converters
                 AuthorName = data.authorName,
                 AmountCopies = (uint)data.amountCopies,
                 AmountPages = data.amountPages,
-                DatePublish = DateTime.Now,
+                DatePublish = DateTime.FromBinary(Convert.ToInt64(data.datePublish)),
                 Genre = data.genre,
                 ISBN = data.isbn,
                 Price = data.price,

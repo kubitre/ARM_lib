@@ -126,5 +126,13 @@ namespace ARM_Lib.views
             reportsReaders.ShowDialog();
             this.IsEnabled = true;
         }
+
+        private void report_history_button_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var reportHistory = new ReportHistory();
+            reportHistory.ShowDialog();
+            this.IsEnabled = true;
+        }
     }
 }

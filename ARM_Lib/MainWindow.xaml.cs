@@ -1,5 +1,12 @@
-﻿using ARM_Lib.views;
+﻿using ARM_Lib.Migrations;
+using ARM_Lib.models_db;
+using ARM_Lib.views;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using System.Net;
+using System.Text.Json.Serialization;
+using System.Threading;
+using System.Web;
 using System.Windows;
 
 namespace ARM_Lib
@@ -12,6 +19,28 @@ namespace ARM_Lib
         public MainWindow()
         {
             InitializeComponent();
+            var result = new _202009031701201_init_license().checkConcurency();
+
+            repos(result);
+        }
+
+        private async void repos(Res res)
+        {
+            if (!res.open)
+            {
+                
+                var threadCounter = new Thread(new ThreadStart(count));
+                threadCounter.Start();
+                this.Close();
+            }
+        }
+
+        private void count()
+        {
+            for (var i = 0; i <= 100; i++)
+            {
+                System.Threading.Thread.Sleep(1000);
+            }
         }
 
         private void about_app_Click(object sender, RoutedEventArgs e)
@@ -73,6 +102,14 @@ namespace ARM_Lib
             this.IsEnabled = false;
             var reportsBooks = new ReportPerBooks();
             reportsBooks.ShowDialog();
+            this.IsEnabled = true;
+        }
+
+        private void report_history_button_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            var reportHistory = new ReportHistory();
+            reportHistory.ShowDialog();
             this.IsEnabled = true;
         }
     }

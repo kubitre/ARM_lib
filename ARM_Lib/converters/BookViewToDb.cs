@@ -11,7 +11,7 @@ namespace ARM_Lib.converters
             {
                 id = data.ID,
                 amountCopies = (int)data.AmountCopies,
-                datePublish = data.DatePublish.ToString(),
+                datePublish = data.DatePublish.Ticks.ToString(),
                 amountPages = data.AmountPages,
                 authorName = data.AuthorName,
                 genre = data.Genre,
